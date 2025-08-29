@@ -26,6 +26,6 @@ export class StoreEntity {
     @ManyToOne(() => UserEntity, (user) => user.stores)
     owner: UserEntity;
 
-    @OneToMany(() => RatingEntity, (rating) => rating.store)
+    @OneToMany(() => RatingEntity, (rating) => rating.store, {onDelete: 'CASCADE'})
     rating: RatingEntity[];
 }

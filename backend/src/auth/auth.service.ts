@@ -9,7 +9,7 @@ export class AuthService {
     return this.jwtService.sign({ user });
   }
 
-  async logout(userId: number, token: string) {
+  async logout(userId: number) {
     console.log('Logging out user:', userId);
     return { message: 'User logged out successfully' };
   }
