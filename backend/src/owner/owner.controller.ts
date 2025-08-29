@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { OwnerService } from './owner.service';
 import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
+import { RoleGuard } from 'src/role.guard';
+import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 
 @Controller('owner')
+@UseGuards(AuthGuard('jwt'), new RoleGuard('owner'))
 export class OwnerController {
   constructor(private readonly ownerService: OwnerService) {}
 

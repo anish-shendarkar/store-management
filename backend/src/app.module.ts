@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { OwnerModule } from './owner/owner.module';
 import { ConfigModule } from '@nestjs/config';
+import { RatingEntity } from './entities/rating.entity';
+import { StoreEntity } from './entities/store.entity';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.DB_DATABASE,
       entities: [
         UserEntity,
+        StoreEntity,
+        RatingEntity
       ],
       synchronize: true,
     }),

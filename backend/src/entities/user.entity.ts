@@ -9,6 +9,8 @@ import {
     JoinTable
 } from 'typeorm';
 import { IsEmail, Length } from 'class-validator';
+import { StoreEntity } from './store.entity';
+import { RatingEntity } from './rating.entity';
 
 @Entity()
 export class UserEntity {
@@ -19,7 +21,7 @@ export class UserEntity {
     @Length(20, 60)
     name: string;
 
-    @Column()
+    @Column({ unique: true })
     @IsEmail()
     email: string;
 
@@ -32,4 +34,10 @@ export class UserEntity {
 
     @Column()
     role: string;
+
+    @OneToMany(() => StoreEntity, (store) => store.owner)
+    stores: StoreEntity[];
+
+    @OneToMany(() => RatingEntity, (rating) => rating.user)
+    rating: RatingEntity[];
 }
