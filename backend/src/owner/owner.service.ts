@@ -1,26 +1,57 @@
-import { Injectable } from '@nestjs/common';
-import { CreateOwnerDto } from './dto/create-owner.dto';
-import { UpdateOwnerDto } from './dto/update-owner.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RatingEntity } from 'src/entities/rating.entity';
+import { StoreEntity } from 'src/entities/store.entity';
+import { UserEntity } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class OwnerService {
-  create(createOwnerDto: CreateOwnerDto) {
-    return 'This action adds a new owner';
+  constructor(
+    @InjectRepository(StoreEntity)
+    private readonly storeRepository: Repository<StoreEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(RatingEntity)
+    private readonly ratingRepository: Repository<RatingEntity>,
+  ) { }
+
+  async getUserRatings(userId: string) {
+    const ratings = await this.ratingRepository.find({
+      where: { store: { owner: { id: Number(userId) } } },
+      relations: ['user', 'store'],
+    });
+    return ratings.map(rating => ({
+      user: {
+        id: rating.user.id,
+        name: rating.user.name,
+        email: rating.user.email,
+      },
+      store: {
+        id: rating.store.id,
+        name: rating.store.name,
+      },
+      value: rating.value,
+    }));
   }
 
-  findAll() {
-    return `This action returns all owner`;
-  }
+  async getAverageStoreRating(userId: number) {
+    const store = await this.storeRepository.findOne({
+      where: { owner: { id: userId } },
+      relations: ['rating'],
+    });
+    if (!store) {
+      throw new BadRequestException('Store not found');
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} owner`;
-  }
-
-  update(id: number, updateOwnerDto: UpdateOwnerDto) {
-    return `This action updates a #${id} owner`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} owner`;
+    const ratings = store.rating.map(r => r.value);
+    const overallRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
+    return {
+      id: store.id,
+      name: store.name,
+      email: store.email,
+      address: store.address,
+      overallRating,
+    };
   }
 }
