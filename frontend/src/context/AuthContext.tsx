@@ -13,6 +13,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
@@ -20,6 +21,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     if (savedToken) setToken(savedToken);
     if (savedRole) setRole(savedRole);
+    setLoading(false);
   }, []);
 
   const login = (data: { token: string; role: string }) => {
@@ -32,9 +34,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setToken(null);
     setRole(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    localStorage.clear();
   };
+
+  if(loading) return null;
 
   return (
     <AuthContext.Provider value={{ role, token, login, logout }}>

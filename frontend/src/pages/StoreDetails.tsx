@@ -45,7 +45,7 @@ export default function StoreDetails() {
             <option key={v} value={v}>{v}</option>
           ))}
         </select>
-        <button onClick={handleRating} className="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+        <button onClick={handleRating} className="ml-2 bg-green-500 text-white px-4 py-2 rounded cursor-pointer">
           Submit
         </button>
       </div>

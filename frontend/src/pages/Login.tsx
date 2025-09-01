@@ -30,6 +30,9 @@ const LoginPage: React.FC = () => {
                     <input className='border p-2 rounded mb-4 w-full' value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
                     <input className='border p-2 rounded mb-4 w-full' type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
                     <button className='flex mx-auto px-8 py-2 rounded-full bg-gradient-to-b from-blue-500 to-blue-600 text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200' type="submit">Login</button>
+                    <p className="mt-4 text-center">
+                        Don't have an account? <a href="/register" className="text-blue-500">Register</a>
+                    </p>
                 </form>
             </div>
         </div>
