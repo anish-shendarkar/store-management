@@ -20,13 +20,15 @@ export class UserController {
   }
 
   @Get('stores')
-  async getAllStores() {
-    return await this.userService.getAllStores();
+  async getAllStores(@Req() req) {
+    const userId = req.user.user.id;
+    return await this.userService.getAllStores(userId);
   }
 
   @Get('search/stores')
-  async searchStores(@Query('q') query: string) {
-    return await this.userService.searchStores(query);
+  async searchStores(@Query('q') query: string, @Req() req) {
+    const userId = req.user.user.id;
+    return await this.userService.searchStores(query, userId);
   }
 
   @Get('stores/:storeId')

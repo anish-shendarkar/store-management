@@ -62,11 +62,11 @@ export class UserService {
     return { message: 'Password updated successfully' };
   }
 
-  async getAllStores() {
+  async getAllStores(userId: number) {
     return await this.storeRepository.find();
   }
 
-  async searchStores(query: string) {
+  async searchStores(query: string, userId: number) {
     return await this.storeRepository.find({
       where: [
         { name: ILike(`%${query}%`) },
