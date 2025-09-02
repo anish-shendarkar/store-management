@@ -21,15 +21,14 @@ export class OwnerService {
       where: { store: { owner: { id: Number(userId) } } },
       relations: ['user', 'store'],
     });
+    if(!ratings) {
+      throw new BadRequestException('No ratings found');
+    }
     return ratings.map(rating => ({
       user: {
         id: rating.user.id,
         name: rating.user.name,
         email: rating.user.email,
-      },
-      store: {
-        id: rating.store.id,
-        name: rating.store.name,
       },
       value: rating.value,
     }));
@@ -47,11 +46,14 @@ export class OwnerService {
     const ratings = store.rating.map(r => r.value);
     const overallRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
     return {
-      id: store.id,
-      name: store.name,
-      email: store.email,
-      address: store.address,
       overallRating,
     };
+  }
+
+  async getTotalRatings(userId: number) {
+    const ratings = await this.ratingRepository.count({
+      where: { store: { owner: { id: userId } } },
+    });
+    return ratings;
   }
 }

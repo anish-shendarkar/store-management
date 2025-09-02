@@ -23,6 +23,9 @@ export class StoreEntity {
     @Column()
     address: string;
 
+    @Column()
+    averageRating: number;
+
     @ManyToOne(() => UserEntity, (user) => user.stores)
     owner: UserEntity;
 

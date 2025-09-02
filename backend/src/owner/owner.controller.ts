@@ -20,4 +20,10 @@ export class OwnerController {
     const userId = req.user.user.id;
     return this.ownerService.getAverageStoreRating(userId);
   }
+
+  @Get('totalratings')
+  async getTotalRatings(@Req() req) {
+    const userId = req.user.user.id;
+    return this.ownerService.getTotalRatings(userId);
+  }
 }

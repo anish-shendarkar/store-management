@@ -87,6 +87,13 @@ export class UserService {
 
     const ratings = store.rating.map(r => r.value);
     const overallRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
+    store.averageRating = overallRating;
+    await this.storeRepository.save(store);
+
+    if (store.owner) {
+      store.owner.averageRating = overallRating;
+      await this.userRepository.save(store.owner);
+    }
 
     const userRatingValue = await this.ratingRepository.findOne({
       where: { user: { id: userId }, store: { id: storeId } },
@@ -128,6 +135,16 @@ export class UserService {
       store: store
     });
     await this.ratingRepository.save(newRating);
+
+    const ratings = store.rating.map(r => r.value);
+    const overallRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
+    store.averageRating = overallRating;
+    if (store.owner) {
+      store.owner.averageRating = overallRating;
+      await this.userRepository.save(store.owner);
+    }
+    await this.storeRepository.save(store);
+
     return { message: 'Store rated successfully' };
   }
 }

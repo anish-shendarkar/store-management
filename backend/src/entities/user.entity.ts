@@ -35,6 +35,9 @@ export class UserEntity {
     @Column()
     role: string;
 
+    @Column({ type: 'float', default: 0 })
+    averageRating: number;
+
     @OneToMany(() => StoreEntity, (store) => store.owner)
     stores: StoreEntity[];
 
