@@ -11,12 +11,47 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post('createuser')
-  create(@Body() createUserByAdminDto: CreateUserByAdminDto) {
+  async create(@Body() createUserByAdminDto: CreateUserByAdminDto) {
     return this.adminService.createUser(createUserByAdminDto);
   }
 
   @Post('addstore')
-  addStore(@Body() createStoreDto: CreateStoreDto) {
+  async addStore(@Body() createStoreDto: CreateStoreDto) {
     return this.adminService.addStore(createStoreDto);
+  }
+
+  @Get('totalusers')
+  async getTotalUsers() {
+    return this.adminService.getTotalUsers();
+  }
+
+  @Get('totalstores')
+  async getTotalStores() {
+    return this.adminService.getTotalStores();
+  }
+
+  @Get('totalratings')
+  async getTotalRatings() {
+    return this.adminService.getTotalRatings();
+  }
+
+  @Get('storesinfo')
+  async getStoresInfo() {
+    return this.adminService.getStoresInfo();
+  }
+
+  @Get('normalusersinfo')
+  async getNormalUsersInfo() {
+    return this.adminService.getNormalUsersInfo();
+  }
+
+  @Get('adminusersinfo')
+  async getAdminUsersInfo() {
+    return this.adminService.getAdminUsersInfo();
+  }
+
+  @Get('allusersinfo')
+  async getAllUsersInfo() {
+    return this.adminService.getAllUsersInfo();
   }
 }

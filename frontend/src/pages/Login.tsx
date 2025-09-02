@@ -15,8 +15,17 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         try {
             const data = await loginService(email, password);
+            console.log(data.role);
             auth?.login(data);
-            navigate("/stores");
+            const role = data.role;
+            if(role == "admin") {
+                navigate("/admin");
+            } else if(role == "owner") {
+                navigate("/owner");
+            } else if(role == "user") {
+                navigate("/stores");
+            }
+
         } catch (error) {
             alert("Invalid credentials");
         }

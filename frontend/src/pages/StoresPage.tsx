@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchStores, searchStores } from "../services/userApi";
 import { Link } from "react-router-dom";
+import { LogoutButton } from "@/components/logout";
 
 interface Store {
   id: number;
@@ -30,7 +31,8 @@ export default function Stores() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Stores</h1>
-      <div className="my-4 flex gap-2">
+      <LogoutButton />
+      <div className="my-4 flex gap-2 ">
         <input
           type="text"
           value={search}
@@ -45,10 +47,10 @@ export default function Stores() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
         {stores.map((store) => (
-          <div key={store.id} className="rounded-lg p-4 shadow-md border-2 border-transparent transition-all duration-300 hover:border-blue-500 hover:shadow-green-300 cursor-pointer">
+          <div key={store.id} className="rounded-lg p-4 shadow-md border-2 border-transparent transition-all duration-300 hover:border-blue-500 hover:shadow-green-300">
             <h2 className="font-semibold">{store.name}</h2>
-            <p>{store.email}</p>
-            <p>{store.address}</p>
+            <p>E-mail: {store.email}</p>
+            <p>Address: {store.address}</p>
             <Link to={`/stores/${store.id}`} className="text-blue-600">
               View Details
             </Link>

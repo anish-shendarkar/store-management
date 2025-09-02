@@ -62,29 +62,52 @@ export class AdminService {
   }
 
   async getStoresInfo() {
-    return await this.storeRepository.find({ relations: ['rating'] });
+    const stores = await this.storeRepository.find({
+      relations: ['rating'],
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        rating: {
+          id: true,
+          value: true,
+        }
+      }
+    });
+
+    return stores.map(store => ({
+      id: store.id,
+      name: store.name,
+      email: store.email,
+      address: store.address,
+      ratings: store.rating.map(r => ({
+        id: r.id,
+        value: r.value,
+      }))
+    }));
   }
 
   async getNormalUsersInfo() {
-    return await this.userRepository.find({ where: { role: 'user' }});
+    return await this.userRepository.find({ where: { role: 'user' } });
   }
 
   async getAdminUsersInfo() {
-    return await this.userRepository.find({ where: { role: 'admin' }});
+    return await this.userRepository.find({ where: { role: 'admin' } });
   }
 
   async getAllUsersInfo() {
     const users = await this.userRepository.find();
-    
+
     return users.map(user => {
-      const { id, name, email, address, role, rating } = user;
+      const { id, name, email, address, role, averageRating } = user;
       return {
         id,
         name,
         email,
         address,
         role,
-        ...(role === 'owner' ? { rating } : {}),
+        ...(role === 'owner' ? { averageRating } : {}),
       };
     });
   }
